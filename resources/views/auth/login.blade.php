@@ -81,15 +81,15 @@
                     </div>
 
                     <br />
-                    <center>
+                    <div style="text-align: center;">
                         <div class='row'>
                             <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
                         </div>
-                    </center>
+                    </div>
                 </form>
             </div>
         </div>
-        <a href="/register">Create account</a>
+        <a href="{{ route('register') }}">Create account</a>
     </div>
 
     <div class="section"></div>

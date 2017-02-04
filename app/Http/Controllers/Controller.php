@@ -24,7 +24,7 @@ class Controller extends BaseController
     {
         $this->datastore = new DatastoreClient([
             'projectId' => env('GOOGLE_PROJECT_ID'),
-            'keyFilePath' => __DIR__ . '/../../' . env('GOOGLE_CREDENTIALS_JSON'),
+            'keyFilePath' => __DIR__ . '/../../../' . env('GOOGLE_CREDENTIALS_JSON'),
             'namespaceId' => env('DB_DATABASE')
         ]);
     }

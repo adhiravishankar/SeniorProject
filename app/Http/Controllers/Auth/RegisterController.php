@@ -2,7 +2,6 @@
 
 namespace Caesar\Http\Controllers\Auth;
 
-use Caesar\Model\User;
 use Caesar\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -36,6 +35,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
         $this->middleware('guest');
     }
 
@@ -58,14 +58,14 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return User
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = $this->datastore->entity('User', [
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+        $this->datastore->insert($user);
     }
 }
