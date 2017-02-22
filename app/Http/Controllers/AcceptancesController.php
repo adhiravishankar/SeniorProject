@@ -9,7 +9,6 @@
 namespace Caesar\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class AcceptancesController extends Controller
 {
@@ -18,30 +17,27 @@ class AcceptancesController extends Controller
      * Returns a list of colleges
      *
      * @param Request $request
-     * @return View
      */
     public function index(Request $request)
     {
         if ($request->has('page')) {
             $offset = $request->has('page') * 100 - 100;
-            $colleges = $this->datastore->runQuery($this->datastore->query()->kind('College')->offset($offset)
-                ->order('Name')->projection(['name']));
+            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')->offset($offset));
         } else {
-            $colleges = $this->datastore->runQuery($this->datastore->query()->kind('College')->order('Name')
-                ->limit(100)->projection(['name']));
+            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')->limit(100));
         }
-        return view('colleges.list')->with('colleges', $colleges);
+        dd($accepts);
     }
 
     /**
-     * Return details of a college
+     * Return details of a colleges
      *
      * @param Request $request
-     * @return View
+     * @param $id
      */
-    public function details(Request $request)
+    public function details(Request $request, $id)
     {
-        $college = $this->datastore->lookup($this->datastore->key('College', $request->get('id')));
-        return view('colleges.data')->with('college', $college);
+        $accept = $this->datastore->lookup($this->datastore->key('Acceptance', $id));
+        dd($accept);
     }
 }
