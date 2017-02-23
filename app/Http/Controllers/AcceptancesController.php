@@ -33,11 +33,19 @@ class AcceptancesController extends Controller
      * Return details of a colleges
      *
      * @param Request $request
-     * @param $id
+     * @param int $college
+     * @param int $major
      */
-    public function details(Request $request, $id)
+    public function details(Request $request, $college, $major)
     {
-        $accept = $this->datastore->lookup($this->datastore->key('Acceptance', $id));
-        dd($accept);
+        if ($request->has('page')) {
+            $offset = $request->has('page') * 100 - 100;
+            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')->limit(100)
+                ->filter('college', '=', $college)->filter('major', '=', $major)->offset($offset));
+        } else {
+            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->filter('college', '=', $college)->filter('major', '=', $major)->limit(100));
+        }
+        dd($accepts);
     }
 }

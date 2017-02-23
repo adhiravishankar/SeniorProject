@@ -42,7 +42,15 @@ class CollegesController extends Controller
     public function details(Request $request, $id)
     {
         $college = $this->datastore->lookup($this->datastore->key('SimplifiedCollege', $id));
-        dd($college);
+        if ($request->has('page')) {
+            $offset = $request->has('page') * 100 - 100;
+            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->filter('college', '=', $id)->offset($offset));
+        } else {
+            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->filter('college', '=', $id)->limit(100));
+        }
+        dd($college, $accepts);
     }
 
 }

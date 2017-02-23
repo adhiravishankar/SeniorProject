@@ -1,16 +1,8 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: adhir
- * Date: 1/29/2017
- * Time: 12:15 PM
- */
-?>
 <!DOCTYPE html>
 <html >
 <head>
     <meta charset="UTF-8">
-    <title>Login Form with Materializecss</title>
+    <title>Login</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
     <style>
@@ -44,7 +36,6 @@
         }
     </style>
 </head>
-
 <body>
 <div class="section"></div>
 <main>
@@ -55,7 +46,7 @@
         <div class="section"></div>
 
         <div class="container">
-            <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+            <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0 48px; border: 1px solid #EEE;">
 
                 <form class="col s12" method="post">
                     <div class='row'>

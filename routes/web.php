@@ -24,5 +24,4 @@ Route::get('majors', 'MajorsController@index')->name('majorsList');
 Route::get('majors/{id}', 'MajorsController@details')->name('majorsDetails');
 Route::get('majors/search', 'MajorsController@search')->name('majorsSearch');
 Route::get('acceptances', 'AcceptancesController@index')->name('acceptancesList');
-Route::get('acceptances/{id}', 'AcceptancesController@details')->name('acceptancesDetails');
-Route::get('acceptances/search', 'AcceptancesController@search')->name('acceptancesSearch');
+Route::get('acceptances/{college}/{major}', 'AcceptancesController@details')->name('acceptancesDetails');
