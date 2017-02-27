@@ -48,4 +48,8 @@ class AcceptancesController extends Controller
         }
         dd($accepts);
     }
+
+
+
+
 }

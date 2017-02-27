@@ -8,6 +8,7 @@
         "php": ">=5.6.4",
         "barryvdh/laravel-ide-helper": "2.*",
         "bkwld/laravel-pug": "^1.1",
+        "google/apiclient": "^2.0",
         "google/cloud": "0.*",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0"

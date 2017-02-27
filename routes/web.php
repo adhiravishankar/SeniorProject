@@ -11,17 +11,20 @@
 |
 */
 
-Route::get('/', function () {
+/** @var \Illuminate\Routing\Router $router */
+$router->get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::get('colleges', 'CollegesController@index')->name('collegesList');
-Route::get('colleges/{id}', 'CollegesController@details')->name('collegesDetails');
-Route::get('colleges/search', 'CollegesController@search')->name('collegesSearch');
-Route::get('majors', 'MajorsController@index')->name('majorsList');
-Route::get('majors/{id}', 'MajorsController@details')->name('majorsDetails');
-Route::get('majors/search', 'MajorsController@search')->name('majorsSearch');
-Route::get('acceptances', 'AcceptancesController@index')->name('acceptancesList');
-Route::get('acceptances/{college}/{major}', 'AcceptancesController@details')->name('acceptancesDetails');
+$router->get('login', 'Auth\LoginController@showLoginForm')->name('login');
+$router->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+$router->post('google-register', 'Auth\RegisterController@googleRegistration')->name('googleRegistration');
+$router->get('profile', 'ProfileController@profile')->name('profile');
+$router->get('colleges', 'CollegesController@index')->name('collegesList');
+$router->get('colleges/{id}', 'CollegesController@details')->name('collegesDetails');
+$router->get('colleges/search', 'CollegesController@search')->name('collegesSearch');
+$router->get('majors', 'MajorsController@index')->name('majorsList');
+$router->get('majors/{id}', 'MajorsController@details')->name('majorsDetails');
+$router->get('majors/search', 'MajorsController@search')->name('majorsSearch');
+$router->get('acceptances', 'AcceptancesController@index')->name('acceptancesList');
+$router->get('acceptances/{college}/{major}', 'AcceptancesController@details')->name('acceptancesDetails');

@@ -2,7 +2,11 @@
 
 namespace Caesar\Http\Controllers\Auth;
 
+use Auth;
 use Caesar\Http\Controllers\Controller;
+use Caesar\User;
+use Google_Client;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -67,5 +71,36 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
         $this->datastore->insert($user);
+    }
+
+    /**
+     *
+     *
+     * @param Request $request
+     */
+    protected function googleRegistration(Request $request)
+    {
+        $client = new Google_Client(['client_id' => '528963535795-c6tp6j333s3ehvhgemfngecdbt8f0iln.apps.googleusercontent.com']);
+        $payload = $client->verifyIdToken($request->get('id_token'));
+        if ($payload) {
+            $userid = $payload['sub'];
+            $name = $payload['name'];
+            $picture = $payload['picture'];
+            $email = $payload['email'];
+            $users = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('User')
+                ->filter('google_user_id', '=', $userid)));
+            if (collect($users)->count() > 0) {
+                Auth::login(User::createUser($users[0]));
+                redirect('profile');
+            } else {
+                $user = new User($this->datastore->key('User'), ['google_user_id' => $userid, 'name' => $name,
+                    'picture' => $picture, 'email' => $email], ['excludeFromIndexes' => ['picture']]);
+                $this->datastore->insert($user);
+                Auth::login($user);
+                redirect('profile');
+            }
+        } else {
+            redirect('login');
+        }
     }
 }

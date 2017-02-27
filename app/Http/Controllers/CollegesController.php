@@ -8,8 +8,8 @@
 
 namespace Caesar\Http\Controllers;
 
-use Caesar\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CollegesController extends Controller
 {
@@ -18,11 +18,11 @@ class CollegesController extends Controller
      * Returns a list of colleges
      *
      * @param Request $request
+     * @return View
      */
     public function index(Request $request)
     {
         if ($request->has('page')) {
-            dd('page');
             $offset = $request->has('page') * 100 - 100;
             $colleges = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedCollege')->offset($offset)
                 ->order('Name'));
@@ -30,7 +30,7 @@ class CollegesController extends Controller
             $colleges = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedCollege')->order('name')
                 ->limit(100));
         }
-        dd(iterator_to_array($colleges));
+        return view('colleges.index')->with('colleges', $colleges);
     }
 
     /**
@@ -41,14 +41,15 @@ class CollegesController extends Controller
      */
     public function details(Request $request, $id)
     {
+        $id = base_convert($id, 36, 10);
         $college = $this->datastore->lookup($this->datastore->key('SimplifiedCollege', $id));
         if ($request->has('page')) {
             $offset = $request->has('page') * 100 - 100;
-            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
-                ->filter('college', '=', $id)->offset($offset));
+            $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->filter('college', '=', $id)->offset($offset)));
         } else {
-            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
-                ->filter('college', '=', $id)->limit(100));
+            $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->filter('college', '=', $id)->limit(100)));
         }
         dd($college, $accepts);
     }

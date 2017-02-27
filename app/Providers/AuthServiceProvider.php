@@ -25,6 +25,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        $this->app['auth']->provider('datastore', function()
+        {
+            return new DatastoreUserProvider();
+        });
     }
 }

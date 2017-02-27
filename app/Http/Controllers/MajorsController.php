@@ -21,7 +21,6 @@ class MajorsController extends Controller
     public function index(Request $request)
     {
         if ($request->has('page')) {
-            dd('page');
             $offset = $request->has('page') * 100 - 100;
             $majors = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedMajor')->offset($offset)
                 ->order('Name'));
@@ -41,6 +40,5 @@ class MajorsController extends Controller
     public function details(Request $request, $id)
     {
         $major = $this->datastore->lookup($this->datastore->key('SimplifiedMajor', $id));
-        dd($major);
     }
 }
