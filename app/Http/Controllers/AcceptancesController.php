@@ -22,9 +22,11 @@ class AcceptancesController extends Controller
     {
         if ($request->has('page')) {
             $offset = $request->has('page') * 100 - 100;
-            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')->offset($offset));
+            $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->offset($offset)->limit(100)));
         } else {
-            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')->limit(100));
+            $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->limit(100)));
         }
         dd($accepts);
     }
@@ -40,16 +42,13 @@ class AcceptancesController extends Controller
     {
         if ($request->has('page')) {
             $offset = $request->has('page') * 100 - 100;
-            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')->limit(100)
-                ->filter('college', '=', $college)->filter('major', '=', $major)->offset($offset));
+            $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->filter('college', '=', $college)->filter('major', '=', $major)->offset($offset)->limit(100)));
         } else {
-            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
-                ->filter('college', '=', $college)->filter('major', '=', $major)->limit(100));
+            $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->filter('college', '=', $college)->filter('major', '=', $major)->limit(100)));
         }
         dd($accepts);
     }
-
-
-
 
 }

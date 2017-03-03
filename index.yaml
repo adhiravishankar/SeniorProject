@@ -1,0 +1,8 @@
+indexes:
+
+- kind: Acceptance
+  properties:
+  - name: college
+  - name: date_add_ts
+    direction: desc
+
