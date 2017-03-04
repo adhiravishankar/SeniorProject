@@ -13,8 +13,7 @@
                         <p></p>
                     </div>
                     <div class="card-action">
-                        <a href="#">Edit Profile</a>
-                        <a href="#"></a>
+                        <a href="{{ route('editProfile') }}">Edit Profile</a>
                     </div>
                 </div>
             </div>
@@ -23,15 +22,15 @@
                     <div class="card-content black-text">
                         <span class="card-title">Colleges</span>
                         <div class="collection">
-                            <a href="#!" class="collection-item">Alvin</a>
-                            <a href="#!" class="collection-item">Alvin</a>
-                            <a href="#!" class="collection-item">Alvin</a>
-                            <a href="#!" class="collection-item">Alvin</a>
+                            @foreach($colleges as $college)
+                                <a href="{{ route('collegesDetails', ['id' => $college->key()->pathEndIdentifier() ]) }}" class="collection-item">{{ $college->offsetGet('name') }}</a>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
 @endsection

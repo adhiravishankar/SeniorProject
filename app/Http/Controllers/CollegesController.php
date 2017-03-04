@@ -8,7 +8,6 @@
 
 namespace Caesar\Http\Controllers;
 
-use Google\Cloud\Datastore\Query\Query;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -47,10 +46,10 @@ class CollegesController extends Controller
         if ($request->has('page')) {
             $offset = $request->has('page') * 100 - 100;
             $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
-                ->filter('college', '=', $id)->offset($offset)->order('date_add_ts', 'DESCENDING')->limit(100)));
+                ->filter('simplified_college', '=', $id)->offset($offset)->order('date_add_ts', 'DESCENDING')->limit(100)));
         } else {
             $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
-                ->filter('college', '=', $id)->order('date_add_ts', 'DESCENDING')->limit(100)));
+                ->filter('simplified_college', '=', $id)->order('date_add_ts', 'DESCENDING')->limit(100)));
         }
         dd($college, $accepts);
     }

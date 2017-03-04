@@ -20,6 +20,7 @@ $router->get('login', 'Auth\LoginController@showLoginForm')->name('login');
 $router->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 $router->post('google-register', 'Auth\RegisterController@googleRegistration')->name('googleRegistration');
 $router->get('profile', 'ProfileController@profile')->name('profile');
+$router->get('edit-profile', 'ProfileController@editProfile')->name('editProfile');
 $router->get('colleges', 'CollegesController@index')->name('collegesList');
 $router->get('colleges/{id}', 'CollegesController@details')->name('collegesDetails');
 $router->get('colleges/search', 'CollegesController@search')->name('collegesSearch');

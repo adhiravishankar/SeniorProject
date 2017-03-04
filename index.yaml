@@ -6,3 +6,15 @@ indexes:
   - name: date_add_ts
     direction: desc
 
+- kind: Acceptance
+  properties:
+   - name: simplified_major
+   - name: date_add_ts
+     direction: desc
+
+- kind: Acceptance
+  properties:
+   - name: simplified_college
+   - name: date_add_ts
+     direction: desc
+
