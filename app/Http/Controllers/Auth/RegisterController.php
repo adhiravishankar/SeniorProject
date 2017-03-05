@@ -6,6 +6,7 @@ use Auth;
 use Caesar\Http\Controllers\Controller;
 use Caesar\User;
 use Google_Client;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -35,7 +36,6 @@ class RegisterController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -74,9 +74,10 @@ class RegisterController extends Controller
     }
 
     /**
-     *
+     * Login or Register via Google
      *
      * @param Request $request
+     * @return RedirectResponse
      */
     protected function googleRegistration(Request $request)
     {
@@ -91,16 +92,16 @@ class RegisterController extends Controller
                 ->filter('google_user_id', '=', $userid)));
             if (collect($users)->count() > 0) {
                 Auth::login(User::createUser($users[0]));
-                redirect('profile');
+                return redirect()->route('profile');
             } else {
                 $user = new User($this->datastore->key('User'), ['google_user_id' => $userid, 'name' => $name,
                     'picture' => $picture, 'email' => $email], ['excludeFromIndexes' => ['picture']]);
                 $this->datastore->insert($user);
                 Auth::login($user);
-                redirect('profile');
+                return redirect()->route('profile');
             }
         } else {
-            redirect('login');
+            return redirect()->route('login');
         }
     }
 }

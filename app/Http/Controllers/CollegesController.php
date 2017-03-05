@@ -8,6 +8,7 @@
 
 namespace Caesar\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -38,11 +39,15 @@ class CollegesController extends Controller
      *
      * @param Request $request
      * @param $id
+     * @return View
      */
     public function details(Request $request, $id)
     {
         $id = (int) base_convert($id, 36, 10);
         $college = $this->datastore->lookup($this->datastore->key('SimplifiedCollege', $id));
+        $selected = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('UserCollege')
+            ->filter('user', '=', (int) Auth::user()->getAuthIdentifier())->filter('college', '=', (int) $id)->limit(1)));
+        $selected = collect($selected)->count() == 0 ? false : true;
         if ($request->has('page')) {
             $offset = $request->has('page') * 100 - 100;
             $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
@@ -51,7 +56,7 @@ class CollegesController extends Controller
             $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
                 ->filter('simplified_college', '=', $id)->order('date_add_ts', 'DESCENDING')->limit(100)));
         }
-        dd($college, $accepts);
+        return view('colleges.data')->with('college', $college)->with('selected', $selected)->with('accepts', $accepts);
     }
 
 }

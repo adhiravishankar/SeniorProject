@@ -9,6 +9,7 @@
 namespace Caesar\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class MajorsController extends Controller
 {
@@ -35,6 +36,7 @@ class MajorsController extends Controller
      *
      * @param Request $request
      * @param $id
+     * @return View
      */
     public function details(Request $request, $id)
     {
