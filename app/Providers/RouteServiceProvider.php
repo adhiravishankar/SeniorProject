@@ -2,8 +2,8 @@
 
 namespace Caesar\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Route;
 
 class RouteServiceProvider extends ServiceProvider
 {

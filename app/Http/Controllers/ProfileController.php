@@ -43,8 +43,8 @@ class ProfileController extends Controller
     public function editProfile()
     {
         $user = Auth::user();
-        $colleges = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('CollegeInterest')
-            ->filter('user', '=', (int) $user->getAuthIdentifier())));
+        $colleges = $this->datastore->runQuery($this->datastore->query()->kind('CollegeInterest')
+            ->filter('user', '=', (int) $user->getAuthIdentifier()));
         $collegeKeys = collect();
         foreach ($colleges['found'] as $college)
             /** @var Entity $college */
@@ -66,6 +66,7 @@ class ProfileController extends Controller
             'name' => $request->get('name'),
             'email' => $request->get('email')
         ]);
+        $this->datastore->update($user);
         return redirect()->route('profile');
     }
 

@@ -27,3 +27,4 @@ $router->get('majors/{id}', 'MajorsController@details')->name('majorsDetails');
 $router->get('majors/search', 'MajorsController@search')->name('majorsSearch');
 $router->get('acceptances', 'AcceptancesController@index')->name('acceptancesList');
 $router->get('acceptances/{college}/{major}', 'AcceptancesController@details')->name('acceptancesDetails');
+$router->post('acceptance', 'AcceptancesController@postAcceptance')->name('postAcceptance');

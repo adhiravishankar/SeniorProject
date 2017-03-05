@@ -17,6 +17,7 @@ class MajorsController extends Controller
      * Returns a list of majors
      *
      * @param Request $request
+     * @return View
      */
     public function index(Request $request)
     {
@@ -28,7 +29,7 @@ class MajorsController extends Controller
             $majors = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedMajor')->order('name')
                 ->limit(100));
         }
-        dd(iterator_to_array($majors));
+        return view('majors.index')->with('majors', $majors);
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace Caesar\Http\Middleware;
 
+use Auth;
 use Closure;
-use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
 {

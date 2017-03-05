@@ -80,7 +80,10 @@ class DatastoreUserProvider implements UserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
-        // TODO: Implement retrieveByCredentials() method.
+        $credentials = collect($credentials);
+        if ($credentials->has('password')) {
+
+        }
     }
 
     /**

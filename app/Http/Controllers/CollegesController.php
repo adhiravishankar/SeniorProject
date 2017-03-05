@@ -25,11 +25,11 @@ class CollegesController extends Controller
     {
         if ($request->has('page')) {
             $offset = $request->has('page') * 100 - 100;
-            $colleges = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('SimplifiedCollege')
-                ->offset($offset)->order('name')->limit(100)));
+            $colleges = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedCollege')
+                ->offset($offset)->order('name')->limit(100));
         } else {
-            $colleges = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('SimplifiedCollege')
-                ->order('name')->limit(100)));
+            $colleges = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedCollege')
+                ->order('name')->limit(100));
         }
         return view('colleges.index')->with('colleges', $colleges);
     }
@@ -50,11 +50,11 @@ class CollegesController extends Controller
         $selected = collect($selected)->count() == 0 ? false : true;
         if ($request->has('page')) {
             $offset = $request->has('page') * 100 - 100;
-            $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
-                ->filter('simplified_college', '=', $id)->offset($offset)->order('date_add_ts', 'DESCENDING')->limit(100)));
+            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->filter('simplified_college', '=', $id)->offset($offset)->order('date_add_ts', 'DESCENDING')->limit(100));
         } else {
-            $accepts = iterator_to_array($this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
-                ->filter('simplified_college', '=', $id)->order('date_add_ts', 'DESCENDING')->limit(100)));
+            $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
+                ->filter('simplified_college', '=', $id)->order('date_add_ts', 'DESCENDING')->limit(100));
         }
         return view('colleges.data')->with('college', $college)->with('selected', $selected)->with('accepts', $accepts);
     }
