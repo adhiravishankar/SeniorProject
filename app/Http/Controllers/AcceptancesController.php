@@ -8,6 +8,8 @@
 
 namespace Caesar\Http\Controllers;
 
+use Caesar\Http\Requests\PostAcceptanceRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -52,6 +54,20 @@ class AcceptancesController extends Controller
                 ->filter('college', '=', $college)->filter('major', '=', $major)->limit(100));
         }
         return view('accepts.details')->with('accepts', $accepts);
+    }
+
+    /**
+     * Post an acceptance and redirect back to acceptances
+     *
+     * @param PostAcceptanceRequest $request
+     * @return RedirectResponse
+     */
+    public function postAcceptance(PostAcceptanceRequest $request)
+    {
+        $acceptanceKey = $this->datastore->key('Acceptance');
+        $acceptance = $this->datastore->entity($acceptanceKey, $request->all());
+        $this->datastore->insert($acceptance);
+        return redirect()->route('acceptancesList');
     }
 
 }

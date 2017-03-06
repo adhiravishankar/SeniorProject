@@ -13,6 +13,7 @@ use Auth;
 use Caesar\Http\Requests\EditProfileRequest;
 use Google\Cloud\Datastore\Entity;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
@@ -40,17 +41,14 @@ class ProfileController extends Controller
         return view('users.profile')->with('user', $user)->with('colleges', $colleges);
     }
 
+    /**
+     * Show edit profile
+     *
+     * @return View
+     */
     public function editProfile()
     {
-        $user = Auth::user();
-        $colleges = $this->datastore->runQuery($this->datastore->query()->kind('CollegeInterest')
-            ->filter('user', '=', (int) $user->getAuthIdentifier()));
-        $collegeKeys = collect();
-        foreach ($colleges['found'] as $college)
-            /** @var Entity $college */
-            $collegeKeys->push($this->datastore->key('SimplifiedCollege', $college->offsetGet('college')));
-        $colleges = $this->datastore->lookupBatch($collegeKeys->toArray())['found'];
-        return view('users.edit')->with('user', $user)->with('colleges', $colleges);
+        return view('users.edit')->with('user', Auth::user());
     }
 
     /**

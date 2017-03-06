@@ -59,4 +59,15 @@ class CollegesController extends Controller
         return view('colleges.data')->with('college', $college)->with('selected', $selected)->with('accepts', $accepts);
     }
 
+    /**
+     * Returns a list of colleges
+     *
+     * @return View
+     */
+    public function add()
+    {
+        $colleges = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedCollege')->order('name'));
+        return view('colleges.add')->with('colleges', $colleges);
+    }
+
 }

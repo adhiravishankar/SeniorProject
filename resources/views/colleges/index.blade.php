@@ -8,7 +8,7 @@
             <div class="col s12">
                 <div class="card white">
                     <div class="card-content black-text">
-                        <span class="card-title">Colleges</span>
+                        <span class="card-title">Colleges<a class="waves-effect waves-light btn">Add</a></span>
                         <table>
                             <thead>
                             <tr>

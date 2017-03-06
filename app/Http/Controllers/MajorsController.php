@@ -24,7 +24,7 @@ class MajorsController extends Controller
         if ($request->has('page')) {
             $offset = $request->has('page') * 100 - 100;
             $majors = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedMajor')->offset($offset)
-                ->order('Name'));
+                ->order('name')->limit(100));
         } else {
             $majors = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedMajor')->order('name')
                 ->limit(100));
