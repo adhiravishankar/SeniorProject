@@ -20,7 +20,8 @@
             <div class="col s12 m6">
                 <div class="card white">
                     <div class="card-content black-text">
-                        <span class="card-title">Colleges</span>
+                        <span class="card-title"><a href="{{ route('collegesList') }}">Colleges</a>
+                            <a href="{{ route('collegesAdd') }}" class="waves-effect waves-light btn">Add</a></span>
                         <div class="collection">
                             @foreach($colleges as $college)
                                 <a href="{{ route('collegesDetails', ['id' => $college->key()->pathEndIdentifier() ]) }}" class="collection-item">{{ $college->offsetGet('name') }}</a>

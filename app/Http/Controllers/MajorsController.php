@@ -13,6 +13,7 @@ use Illuminate\View\View;
 
 class MajorsController extends Controller
 {
+
     /**
      * Returns a list of majors
      *

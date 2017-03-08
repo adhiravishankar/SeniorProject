@@ -15,6 +15,12 @@ use Illuminate\View\View;
 class CollegesController extends Controller
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('auth');
+    }
+
     /**
      * Returns a list of colleges
      *
@@ -68,6 +74,19 @@ class CollegesController extends Controller
     {
         $colleges = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedCollege')->order('name'));
         return view('colleges.add')->with('colleges', $colleges);
+    }
+
+    /**
+     * Returns a list of colleges
+     *
+     * @return View
+     */
+    public function postAdd(Request $request)
+    {
+        $entity = $this->datastore->entity($this->datastore->key('UserCollege'), ['user' => (int) Auth::user()->getAuthIdentifier(),
+            'college' => (int) $request->get('college')]);
+        $this->datastore->insert($entity);
+        return redirect()->route('collegesAdd');
     }
 
 }
