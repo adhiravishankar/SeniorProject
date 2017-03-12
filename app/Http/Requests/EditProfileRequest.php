@@ -25,7 +25,11 @@ class EditProfileRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'email|required'
+            'email' => 'email|required',
+            'gpa' => 'numeric|required',
+            'grev' => 'integer|required',
+            'grem' => 'integer|required',
+            'grew' => 'integer|required'
         ];
     }
 }

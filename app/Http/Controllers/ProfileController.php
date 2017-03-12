@@ -13,6 +13,7 @@ use Caesar\Http\Requests\EditProfileRequest;
 use Google\Cloud\Datastore\Entity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -63,7 +64,8 @@ class ProfileController extends Controller
      */
     public function editProfile()
     {
-        return view('users.edit')->with('user', Auth::user());
+        $majors = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedMajor')->order('name'));
+        return view('users.edit')->with('user', Auth::user())->with('majors', iterator_to_array($majors));
     }
 
     /**
@@ -74,6 +76,7 @@ class ProfileController extends Controller
      */
     public function postProfile(EditProfileRequest $request)
     {
+        dd($request->all());
         $user = $this->datastore->lookup($this->datastore->key('User', (int) Auth::user()->getAuthIdentifier()));
         $user->set([
             'name' => $request->get('name'),
@@ -83,11 +86,10 @@ class ProfileController extends Controller
         return redirect()->route('profile');
     }
 
-    /** @noinspection PhpInconsistentReturnPointsInspection */
     /**
      * Get favorite colleges
      *
-     * @return array|\Generator
+     * @return array|Collection
      */
     public function getFavoriteColleges()
     {
@@ -100,15 +102,14 @@ class ProfileController extends Controller
             $collegeKeys->push($this->datastore->key('SimplifiedCollege', $college->offsetGet('college')));
         $colleges = $this->datastore->lookupBatch($collegeKeys->toArray());
         if (collect($colleges)->has('found')) {
-            $colleges = collect($colleges['found'])->sortBy(function ($item) {
+            $colleges2 = collect($colleges['found'])->sortBy(function ($item) {
                 /** @var Entity $item */
                 return $item->offsetGet('name');
             });
-            return $colleges;
         } else {
-            $colleges = [];
-            return $colleges;
+            $colleges2 = [];
         }
+        return $colleges2;
     }
 
 }

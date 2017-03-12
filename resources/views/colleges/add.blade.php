@@ -22,7 +22,7 @@
                                 </div>
                             <div class="input-field col s12">
                                     <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Submit
-                                        <i class="mdi-content-send right"></i>
+                                        <i class="zmdi zmdi-mail-send"></i>
                                     </button>
                                 </div>
                         </form>

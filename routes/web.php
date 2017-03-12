@@ -14,6 +14,7 @@
 /** @var \Illuminate\Routing\Router $router */
 $router->get('/', 'ProfileController@home')->name('home');
 $router->get('login', 'Auth\LoginController@showLoginForm')->name('login');
+$router->get('logout', 'Auth\LoginController@logout')->name('logout');
 $router->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 $router->post('google-register', 'Auth\RegisterController@googleRegistration')->name('googleRegistration');
 $router->get('profile', 'ProfileController@profile')->name('profile');
