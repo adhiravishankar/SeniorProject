@@ -13,6 +13,7 @@
 
 /** @var \Illuminate\Routing\Router $router */
 $router->get('/', 'ProfileController@home')->name('home');
+$router->get('/home', 'ProfileController@home2');
 $router->get('login', 'Auth\LoginController@showLoginForm')->name('login');
 $router->get('logout', 'Auth\LoginController@logout')->name('logout');
 $router->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');

@@ -95,7 +95,7 @@ class User extends Entity implements AuthenticatableContract, AuthorizableContra
      */
     public function can($ability, $arguments = [])
     {
-        // TODO: Implement can() method.
+        return true;
     }
 
     /**

@@ -13,7 +13,6 @@ use Caesar\Http\Requests\EditProfileRequest;
 use Google\Cloud\Datastore\Entity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -36,19 +35,27 @@ class ProfileController extends Controller
         $college = (int) $request->get('college');
         $major = (int) $request->get('major');
         $degree = (int) $request->get('degree');
-        $geo = (int) $request->get('geo');
-        $colleges = $this->getFavoriteColleges();
         $majors = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedMajor')->order('name'));
         $degrees = ['PhD', 'Masters', 'MFA', 'MBA', 'JD', 'EdD', 'Other'];
         $geos = ['American', 'International with US Degree', 'International', 'Other'];
         if (is_null($college) || is_null($major) || is_null($degree)) {
             $statistics = $this->datastore->runQuery($this->datastore->query()->kind('AdmissionStatistics')
-                ->filter('college', '=', $college)->filter('major', '=', $major)->filter('degree', '=', $degree));
-            return view('home')->with('statistics', $statistics)->with('colleges', $colleges)->with('majors', $majors)
-                ->with('degrees', $degrees)->with('geos', $geos)->with('geo', $geo);
-        } else {
-            return view('home')->with('colleges', $colleges)->with('majors', $majors)->with('degrees', $degrees)->with('geos', $geos);
+                ->filter('college', '=', $college)->filter('major', '=', $major)
+                ->filter('degree', '=', $degree));
+            return view('home')->with('statistics', $statistics)->with('colleges', $this->getFavoriteColleges())
+                ->with('majors', $majors)->with('degrees', $degrees)->with('geos', $geos)
+                ->with('geo', (int) $request->get('geo'));
         }
+        else
+        {
+            return view('home')->with('colleges', $this->getFavoriteColleges())->with('majors', $majors)
+                ->with('degrees', $degrees)->with('geos', $geos);
+        }
+    }
+
+    public function home2()
+    {
+        return redirect()->route('home');
     }
 
     public function profile()
@@ -89,7 +96,7 @@ class ProfileController extends Controller
     /**
      * Get favorite colleges
      *
-     * @return array|Collection
+     * @return array
      */
     public function getFavoriteColleges()
     {
@@ -105,7 +112,7 @@ class ProfileController extends Controller
             $colleges2 = collect($colleges['found'])->sortBy(function ($item) {
                 /** @var Entity $item */
                 return $item->offsetGet('name');
-            });
+            })->toArray();
         } else {
             $colleges2 = [];
         }

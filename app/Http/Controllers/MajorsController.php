@@ -46,10 +46,12 @@ class MajorsController extends Controller
         if ($request->has('page')) {
             $offset = $request->has('page') * 100 - 100;
             $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
-                ->filter('simplified_major', '=', (int) $id)->offset($offset)->order('date_add_ts', 'DESCENDING')->limit(100));
+                ->filter('simplified_major', '=', (int) $id)->offset($offset)
+                ->order('date_add_ts', 'DESCENDING')->limit(100));
         } else {
             $accepts = $this->datastore->runQuery($this->datastore->query()->kind('Acceptance')
-                ->filter('simplified_major', '=', (int) $id)->order('date_add_ts', 'DESCENDING')->limit(100));
+                ->filter('simplified_major', '=', (int) $id)
+                ->order('date_add_ts', 'DESCENDING')->limit(100));
         }
         return view('majors.details')->with('major', $major)->with('accepts', $accepts);
     }
