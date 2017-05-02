@@ -85,9 +85,10 @@
             </div>
         </div>
         <a href="{{ route('register') }}">Create account</a>
-        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+        <div class="container">
+            <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+        </div>
     </div>
-
     <div class="section"></div>
     <div class="section"></div>
 </main>

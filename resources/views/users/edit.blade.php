@@ -10,25 +10,25 @@
                 {{ csrf_field() }}
                 <div class="row">
                     <div class="input-field col s12 l6">
-                        <input value="{{ $user['name'] }}" id="name" type="text" class="validate">
+                        <input value="{{ $user['name'] }}" name="name" id="name" type="text" class="validate">
                         <label for="name">Name</label>
                     </div>
                     <div class="input-field col s12 l6">
-                        <input value="{{ $user['email'] }}" id="email" type="email" class="validate">
+                        <input value="{{ $user['email'] }}" name="email" id="email" type="email" class="validate">
                         <label for="email">Email</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12 m6 l2">
-                        <input value="{{ $user['gpa'] }}" id="gpa" type="number" step="0.01" max="10" min="0" class="validate">
+                        <input value="{{ $user['gpa'] }}" id="gpa" name="gpa" type="number" step="0.01" max="10" min="0" class="validate">
                         <label for="gpa">GPA</label>
                     </div>
                     <div class="input-field col s12 m6 l2">
-                        <input value="{{ $user['grev'] }}" id="grev" type="number" step="1" max="170" min="130" class="validate">
+                        <input value="{{ $user['grev'] }}" id="grev" name="grev" type="number" step="1" max="170" min="130" class="validate">
                         <label for="grev">GRE Verbal</label>
                     </div>
                     <div class="input-field col s12 m6 l2">
-                        <input value="{{ $user['grem'] }}" id="grem" type="number" step="1" max="170" min="130" class="validate">
+                        <input value="{{ $user['grem'] }}" id="grem" name="grem" type="number" step="1" max="170" min="130" class="validate">
                         <label for="grem">GRE Quantitative</label>
                     </div>
                     <div class="input-field col s12 m6 l2">

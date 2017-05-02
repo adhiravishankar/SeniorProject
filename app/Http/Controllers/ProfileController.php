@@ -14,6 +14,7 @@ use Google\Cloud\Datastore\Entity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use jlawrence\eos\Parser;
 
 class ProfileController extends Controller
 {
@@ -35,21 +36,68 @@ class ProfileController extends Controller
         $college = (int) $request->get('college');
         $major = (int) $request->get('major');
         $degree = (int) $request->get('degree');
-        $majors = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedMajor')->order('name'));
+        $geo = (int) $request->get('geo');
+        $graph = (int) $request->get('graph');
+        $user = Auth::user();
+        $majors = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedMajor')
+            ->order('name'));
         $degrees = ['PhD', 'Masters', 'MFA', 'MBA', 'JD', 'EdD', 'Other'];
         $geos = ['American', 'International with US Degree', 'International', 'Other'];
-        if (is_null($college) || is_null($major) || is_null($degree)) {
+        if ($college == 0 || $major == 0 || $degree == 0) {
             $statistics = $this->datastore->runQuery($this->datastore->query()->kind('AdmissionStatistics')
                 ->filter('college', '=', $college)->filter('major', '=', $major)
                 ->filter('degree', '=', $degree));
             return view('home')->with('statistics', $statistics)->with('colleges', $this->getFavoriteColleges())
                 ->with('majors', $majors)->with('degrees', $degrees)->with('geos', $geos)
-                ->with('geo', (int) $request->get('geo'));
+                ->with('geo', (int) $request->get('geo'))->with('selected_college', null)
+                ->with('selected_major', null)->with('selected_degree', null)->with('selected_geo', null)
+                ->with('selected_graph', null)->with('gpa', 0)->with('gre_math', 0)->with('gre_verbal', 0)
+                ->with('average', 0)->with('decisions', null);
         }
         else
         {
+            $statistic = collect(iterator_to_array($this->datastore->runQuery($this->datastore->query()
+                ->kind('AdmissionStatistic')
+                ->filter('college', '=', $college)
+                ->filter('major', '=', $major)
+                ->filter('degree', '=', $degree))))->first();
+            $gpa = $this->getEquationResult($statistic['gpa_line'], $user->gpa);
+            $grev = $this->getEquationResult($statistic['gre_verbal_line'], $user->grev);
+            $grem = $this->getEquationResult($statistic['gre_math_line'], $user->grem);
+            $math_stats = [$gpa, $grev, $grem];
+            $average = array_sum($math_stats)/count($math_stats);
+            $decisions = collect(iterator_to_array($this->datastore->runQuery($this->datastore->query()
+                ->kind('Acceptance')
+                ->filter('simplified_college', '=', $college)
+                ->filter('simplified_major', '=', $major)
+                ->filter('degree', '=', $degree))));
+            $acceptances = $decisions->filter(function ($decision) {
+                return array_get($decision, 'decision') == 1;
+            })->map(function ($decision) {
+                return $decision->get();
+            });
+            $rejections = $decisions->filter(function ($decision) {
+                return array_get($decision, 'decision') == 2;
+            })->map(function ($decision) {
+                return $decision->get();
+            });
+            $acceptances_3d = $acceptances->map(function ($decision) {
+                return [array_get($decision, 'gpa'), array_get($decision, 'gre_verbal'),
+                    array_get($decision, 'gre_math')];
+            })->values();
+            $rejections_3d = $rejections->map(function ($decision) {
+                return [array_get($decision, 'gpa'), array_get($decision, 'gre_verbal'),
+                    array_get($decision, 'gre_math')];
+            })->values();
             return view('home')->with('colleges', $this->getFavoriteColleges())->with('majors', $majors)
-                ->with('degrees', $degrees)->with('geos', $geos);
+                ->with('degrees', $degrees)->with('geos', $geos)->with('decisions', $decisions)
+                ->with('statistics', $statistic)->with('acceptances_3d', $acceptances_3d)
+                ->with('rejections_3d', $rejections_3d)->with('selected_college', $college)
+                ->with('selected_major', $major)->with('selected_degree', $degree)->with('selected_geo', $geo)
+                ->with('selected_graph', $graph)->with('gpa', round($gpa*100, 2))
+                ->with('gre_verbal', round($grev*100, 2))
+                ->with('gre_math', round($grem*100, 2))
+                ->with('average', round($average*100, 2));
         }
     }
 
@@ -71,7 +119,8 @@ class ProfileController extends Controller
      */
     public function editProfile()
     {
-        $majors = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedMajor')->order('name'));
+        $majors = $this->datastore->runQuery($this->datastore->query()->kind('SimplifiedMajor')
+            ->order('name'));
         return view('users.edit')->with('user', Auth::user())->with('majors', iterator_to_array($majors));
     }
 
@@ -81,13 +130,15 @@ class ProfileController extends Controller
      * @param EditProfileRequest $request
      * @return RedirectResponse
      */
-    public function postProfile(EditProfileRequest $request)
+    public function postProfile(Request $request)
     {
-        dd($request->all());
         $user = $this->datastore->lookup($this->datastore->key('User', (int) Auth::user()->getAuthIdentifier()));
         $user->set([
             'name' => $request->get('name'),
-            'email' => $request->get('email')
+            'email' => $request->get('email'),
+            'gpa' => $request->get('gpa'),
+            'grev' => $request->get('grev'),
+            'grem' => $request->get('grem')
         ]);
         $this->datastore->update($user);
         return redirect()->route('profile');
@@ -117,6 +168,17 @@ class ProfileController extends Controller
             $colleges2 = [];
         }
         return $colleges2;
+    }
+
+    /**
+     * @param $statistic
+     * @param $user
+     */
+    public function getEquationResult($line, $user)
+    {
+        $vars = explode('x', str_replace(' ', '', $line));
+        $number = ((double)$vars[0]) * ((double) $user) + ((double)$vars[1]);
+        return $number;
     }
 
 }
